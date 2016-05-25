@@ -31,14 +31,16 @@ class Source(Base):
         Base.__init__(self, vim)
 
         self.name = 'neosnippet'
-        self.mark = '[nsnip]'
+        self.mark = '[ns]'
         self.rank = 200
 
     def gather_candidates(self, context):
-        return self.vim.eval('values(neosnippet#helpers#get_completion_snippets())')
+        return self.vim.eval(
+            'values(neosnippet#helpers#get_completion_snippets())')
 
     def on_post_filter(self, context):
         for candidate in context['candidates']:
             candidate['dup'] = 1
+            candidate['menu'] = candidate['menu_abbr']
         return context['candidates']
 

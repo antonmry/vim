@@ -1,6 +1,6 @@
 "=============================================================================
-" FILE: echodoc.vim
-" AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" FILE: converter_add_paren.vim
+" AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,53 +26,25 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" For echodoc. "{{{
-let s:doc_dict = {
-      \ 'name' : 'neocomplete',
-      \ 'rank' : 10,
-      \ }
-" @vimlint(EVL102, 1, v:completed_item)
-function! s:doc_dict.search(cur_text) "{{{
-  if !exists('v:completed_item') || empty(v:completed_item)
-    return []
-  endif
-
-  let item = v:completed_item
-
-  let abbr = (item.abbr != '') ? item.abbr : item.word
-  if len(item.menu) > 5
-    " Combine menu.
-    let abbr .= ' ' . item.menu
-  endif
-
-  if item.info != ''
-    let abbr = split(item.info, '\n')[0]
-  endif
-
-  " Skip
-  if len(abbr) < len(item.word) + 2
-    return []
-  endif
-
-  let ret = []
-
-  let match = stridx(abbr, item.word)
-  if match < 0
-    call add(ret, { 'text' : abbr })
-  else
-    call add(ret, { 'text' : item.word, 'highlight' : 'Identifier' })
-    call add(ret, { 'text' : abbr[match+len(item.word) :] })
-  endif
-
-  return ret
+function! neocomplete#filters#converter_add_paren#define() abort "{{{
+  return s:converter
 endfunction"}}}
-" @vimlint(EVL102, 0, v:completed_item)
-"}}}
 
-function! neocomplete#echodoc#init() "{{{
-  if neocomplete#exists_echodoc()
-    call echodoc#register(s:doc_dict.name, s:doc_dict)
-  endif
+let s:converter = {
+      \ 'name' : 'converter_add_paren',
+      \ 'description' : 'add parenthesis if needed',
+      \}
+
+function! s:converter.filter(context) abort "{{{
+  for candidate in filter(copy(a:context.candidates), "
+        \ v:val.word !~ '()\\?$' &&
+        \   (get(v:val, 'abbr', '') =~ '(.*)'
+        \ || get(v:val, 'info', '') =~ '(.*)')
+        \ ")
+    let candidate.word .= '('
+  endfor
+
+  return a:context.candidates
 endfunction"}}}
 
 let &cpo = s:save_cpo

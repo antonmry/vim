@@ -26,62 +26,70 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neosnippet#handlers#_complete_done() "{{{
+function! neosnippet#handlers#_complete_done() abort "{{{
   if empty(v:completed_item)
+        \ || !g:neosnippet#enable_completed_snippet
+        \ || s:is_auto_pairs()
     return
   endif
 
-  let snippets = neosnippet#helpers#get_snippets()
-  if has_key(snippets, v:completed_item.word)
-        \ && !get(snippets[v:completed_item.word], 'oneshot', 0)
-    " Don't overwrite exists snippets
+  let snippet = neosnippet#parser#_get_completed_snippet(
+        \ v:completed_item, neosnippet#util#get_next_text())
+  if snippet == ''
     return
   endif
 
-  let item = v:completed_item
+  let [cur_text, col, _] = neosnippet#mappings#_pre_trigger()
+  call neosnippet#view#_insert(snippet, {}, cur_text, col)
+endfunction"}}}
 
-  let abbr = (item.abbr != '') ? item.abbr : item.word
-  if len(item.menu) > 5
-    " Combine menu.
-    let abbr .= ' ' . item.menu
-  endif
+function! neosnippet#handlers#_cursor_moved() abort "{{{
+  let expand_stack = neosnippet#variables#expand_stack()
 
-  if item.info != ''
-    let abbr = split(item.info, '\n')[0]
-  endif
-
-  if abbr !~ '(.*)'
+  " Get patterns and count.
+  if !&l:modifiable || !&l:modified
+        \ || empty(expand_stack)
     return
   endif
 
-  " Make snippet arguments
-  let cnt = 1
-  let snippet = item.word
-  if snippet !~ '()\?$'
-    let snippet .= '('
+  let expand_info = expand_stack[-1]
+  if expand_info.begin_line == expand_info.end_line
+        \ && line('.') != expand_info.begin_line
+    call neosnippet#view#_clear_markers(expand_info)
   endif
-  for arg in split(matchstr(abbr, '(\zs.\{-}\ze)'), '[^[]\zs\s*,\s*')
-    if cnt != 1
-      let snippet .= ', '
-    endif
-    let snippet .= printf('${%d:#:%s}', cnt, escape(arg, '{}'))
-    let cnt += 1
-  endfor
-  if snippet !~ ')$'
-    let snippet .= ')'
+endfunction"}}}
+
+function! neosnippet#handlers#_all_clear_markers() abort "{{{
+  if !&l:modifiable
+    return
   endif
-  let snippet .= '${0}'
 
-  let options = neosnippet#parser#_initialize_snippet_options()
-  let options.word = 1
-  let options.oneshot = 1
+  let pos = getpos('.')
 
+  try
+    while !empty(neosnippet#variables#expand_stack())
+      call neosnippet#view#_clear_markers(
+            \ neosnippet#variables#expand_stack()[-1])
+    endwhile
+  finally
+    stopinsert
+
+    call setpos('.', pos)
+  endtry
+endfunction"}}}
+
+function! neosnippet#handlers#_restore_unnamed_register() abort "{{{
   let neosnippet = neosnippet#variables#current_neosnippet()
-  let trigger = item.word
-  let neosnippet.snippets[trigger] =
-        \ neosnippet#parser#_initialize_snippet(
-        \   { 'name' : trigger, 'word' : snippet, 'options' : options },
-        \   '', 0, '', trigger)
+
+  if neosnippet.unnamed_register != ''
+        \ && @" !=# neosnippet.unnamed_register
+    let @" = neosnippet.unnamed_register
+    let neosnippet.unnamed_register = ''
+  endif
+endfunction"}}}
+
+function! s:is_auto_pairs() abort "{{{
+  return get(g:, 'neopairs#enable', 0)
 endfunction"}}}
 
 let &cpo = s:save_cpo

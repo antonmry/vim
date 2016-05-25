@@ -21,9 +21,9 @@ Remember that your system's Vim config files remain untouched? During installati
 
     vim -u ~/.vimrc.antonmry
 
-And btw, nothing prevents you from creation of a handy alias in your `.zshrc`:
+And btw, nothing prevents you from creation of a handy alias in your `.bash_aliases`:
 
-    alias vimgo='vim -u ~/.vimrc.antonmry'
+    alias vim='vimx -u ~/.vimrc.antonmry'
 
 ### 3. Thanks
 
