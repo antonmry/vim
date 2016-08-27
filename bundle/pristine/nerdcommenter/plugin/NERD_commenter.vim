@@ -64,6 +64,7 @@ call s:InitVariable("g:NERDRemoveExtraSpaces", 0)
 call s:InitVariable("g:NERDRPlace", "<]")
 call s:InitVariable("g:NERDSpaceDelims", 0)
 call s:InitVariable("g:NERDDefaultAlign", "none")
+call s:InitVariable("g:NERDTrimTrailingWhitespace", 0)
 
 let s:NERDFileNameEscape="[]#*$%'\" ?`!&();<>\\"
 
@@ -75,18 +76,18 @@ let s:delimiterMap = {
     \ 'ada': { 'left': '--', 'leftAlt': '--  ' },
     \ 'ahdl': { 'left': '--' },
     \ 'ahk': { 'left': ';', 'leftAlt': '/*', 'rightAlt': '*/' },
-	\ 'asp': { 'left': '%', 'leftAlt': '%*','rightAlt': '*%' },
     \ 'amiga': { 'left': ';' },
     \ 'aml': { 'left': '/*' },
     \ 'ampl': { 'left': '#' },
     \ 'apache': { 'left': '#' },
     \ 'apachestyle': { 'left': '#' },
-    \ 'asciidoc': { 'left': '//' },
     \ 'applescript': { 'left': '--', 'leftAlt': '(*', 'rightAlt': '*)' },
     \ 'armasm': { 'left': ';' },
-    \ 'asm68k': { 'left': ';' },
+    \ 'asciidoc': { 'left': '//' },
     \ 'asm': { 'left': ';', 'leftAlt': '#' },
+    \ 'asm68k': { 'left': ';' },
     \ 'asn': { 'left': '--' },
+    \ 'asp': { 'left': '%', 'leftAlt': '%*','rightAlt': '*%' },
     \ 'aspvbs': { 'left': '''', 'leftAlt': '<!--', 'rightAlt': '-->' },
     \ 'asterisk': { 'left': ';' },
     \ 'asy': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
@@ -103,11 +104,11 @@ let s:delimiterMap = {
     \ 'blade': { 'left': '{{--', 'right': '--}}' },
     \ 'bst': { 'left': '%' },
     \ 'btm': { 'left': '::' },
-    \ 'cabal': { 'left': '--' },
-    \ 'caos': { 'left': '*' },
-    \ 'calibre': { 'left': '//' },
-    \ 'catalog': { 'left': '--', 'right': '--' },
     \ 'c': { 'left': '/*','right': '*/', 'leftAlt': '//' },
+    \ 'cabal': { 'left': '--' },
+    \ 'calibre': { 'left': '//' },
+    \ 'caos': { 'left': '*' },
+    \ 'catalog': { 'left': '--', 'right': '--' },
     \ 'cf': { 'left': '<!---', 'right': '--->' },
     \ 'cfg': { 'left': '#' },
     \ 'cg': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
@@ -122,18 +123,17 @@ let s:delimiterMap = {
     \ 'context': { 'left': '%', 'leftAlt': '--' },
     \ 'coq': { 'left': '(*', 'right': '*)' },
     \ 'cpp': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
-    \ 'cuda': { 'left': '/*','right': '*/', 'leftAlt': '//' },
     \ 'crontab': { 'left': '#' },
     \ 'cs': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
-    \ 'teak': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'csp': { 'left': '--' },
     \ 'cterm': { 'left': '*' },
     \ 'cucumber': { 'left': '#' },
-    \ 'cython': { 'left': '# ', 'leftAlt': '#' },
+    \ 'cuda': { 'left': '/*','right': '*/', 'leftAlt': '//' },
     \ 'cvs': { 'left': 'CVS:' },
+    \ 'cython': { 'left': '# ', 'leftAlt': '#' },
     \ 'd': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
-    \ 'dcl': { 'left': '$!' },
     \ 'dakota': { 'left': '#' },
+    \ 'dcl': { 'left': '$!' },
     \ 'debcontrol': { 'left': '#' },
     \ 'debsources': { 'left': '#' },
     \ 'def': { 'left': ';' },
@@ -141,8 +141,8 @@ let s:delimiterMap = {
     \ 'dhcpd': { 'left': '#' },
     \ 'diff': { 'left': '#' },
     \ 'django': { 'left': '<!--','right': '-->', 'leftAlt': '{#', 'rightAlt': '#}' },
-    \ 'docbk': { 'left': '<!--', 'right': '-->' },
     \ 'dns': { 'left': ';' },
+    \ 'docbk': { 'left': '<!--', 'right': '-->' },
     \ 'dockerfile': { 'left': '#' },
     \ 'dosbatch': { 'left': 'REM ', 'leftAlt': '::' },
     \ 'dosini': { 'left': ';' },
@@ -166,8 +166,8 @@ let s:delimiterMap = {
     \ 'esmtprc': { 'left': '#' },
     \ 'expect': { 'left': '#' },
     \ 'exports': { 'left': '#' },
-    \ 'fancy': { 'left': '#' },
     \ 'factor': { 'left': '! ', 'leftAlt': '!# ' },
+    \ 'fancy': { 'left': '#' },
     \ 'fgl': { 'left': '#' },
     \ 'focexec': { 'left': '-*' },
     \ 'form': { 'left': '*' },
@@ -197,25 +197,26 @@ let s:delimiterMap = {
     \ 'groovy': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'gsp': { 'left': '<%--', 'right': '--%>', 'leftAlt': '<!--','rightAlt': '-->'},
     \ 'gtkrc': { 'left': '#' },
-    \ 'haskell': { 'left': '{-','right': '-}', 'nested': 1, 'leftAlt': '--', 'nestedAlt': 1 },
-    \ 'hb': { 'left': '#' },
     \ 'h': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'haml': { 'left': '-#', 'leftAlt': '/' },
-    \ 'haxe': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'handlebars': { 'left': '{{!-- ', 'right': ' --}}' },
+    \ 'haskell': { 'left': '{-','right': '-}', 'nested': 1, 'leftAlt': '--', 'nestedAlt': 1 },
+    \ 'haxe': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
+    \ 'hb': { 'left': '#' },
     \ 'hbs': { 'left': '{{!-- ', 'right': ' --}}' },
     \ 'hercules': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
+    \ 'hive': { 'left': '-- ' },
     \ 'hog': { 'left': '#' },
     \ 'hostsaccess': { 'left': '#' },
     \ 'htmlcheetah': { 'left': '##' },
     \ 'htmldjango': { 'left': '<!--','right': '-->', 'leftAlt': '{#', 'rightAlt': '#}' },
     \ 'htmlos': { 'left': '#', 'right': '/#' },
-    \ 'hyphy': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'hxml': { 'left': '#' },
+    \ 'hyphy': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'ia64': { 'left': '#' },
     \ 'icon': { 'left': '#' },
-    \ 'idlang': { 'left': ';' },
     \ 'idl': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
+    \ 'idlang': { 'left': ';' },
     \ 'idris': { 'leftAlt': '--', 'left': '{-', 'right': '-}' },
     \ 'inform': { 'left': '!' },
     \ 'inittab': { 'left': '#' },
@@ -236,7 +237,7 @@ let s:delimiterMap = {
     \ 'kix': { 'left': ';' },
     \ 'kscript': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'lace': { 'left': '--' },
-	\ 'laravel': { 'left': '{{--', 'right': '--}}' },
+    \ 'laravel': { 'left': '{{--', 'right': '--}}' },
     \ 'ldif': { 'left': '#' },
     \ 'less': { 'left': '/*','right': '*/' },
     \ 'lhaskell': { 'left': '>{-','right': '-}', 'leftAlt': '>-- ' },
@@ -330,13 +331,14 @@ let s:delimiterMap = {
     \ 'ps1': { 'left': '#' },
     \ 'psf': { 'left': '#' },
     \ 'ptcap': { 'left': '#' },
+    \ 'pug': { 'left': '//-', 'leftAlt': '//' },
     \ 'puppet': { 'left': '#' },
     \ 'pyrex': { 'left': '# ', 'leftAlt': '#' },
     \ 'python': { 'left': '# ', 'leftAlt': '#' },
+    \ 'r': { 'left': '#', 'leftAlt': '#''' },
     \ 'racket': { 'left': ';', 'nested': 1, 'leftAlt': '#|', 'rightAlt': '|#', 'nestedAlt': 1 },
     \ 'radiance': { 'left': '#' },
     \ 'ratpoison': { 'left': '#' },
-    \ 'r': { 'left': '#', 'leftAlt': '#''' },
     \ 'rc': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'rebol': { 'left': ';' },
     \ 'registry': { 'left': ';' },
@@ -348,15 +350,15 @@ let s:delimiterMap = {
     \ 'robots': { 'left': '#' },
     \ 'rspec': { 'left': '#' },
     \ 'ruby': { 'left': '#', 'leftAlt': '=begin', 'rightAlt': '=end' },
-    \ 'rust': { 'left': '//', 'leftAlt': '///', 'rightAlt': '///' },
+    \ 'rust': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'sa': { 'left': '--' },
     \ 'samba': { 'left': ';', 'leftAlt': '#' },
     \ 'sass': { 'left': '//', 'leftAlt': '/*' },
     \ 'sather': { 'left': '--' },
     \ 'scala': { 'left': '//', 'nested': 1, 'leftAlt': '/*', 'rightAlt': '*/', 'nestedAlt': 1 },
-    \ 'scons': { 'left': '#' },
     \ 'scheme': { 'left': ';', 'nested': 1, 'leftAlt': '#|', 'rightAlt': '|#', 'nestedAlt': 1 },
     \ 'scilab': { 'left': '//' },
+    \ 'scons': { 'left': '#' },
     \ 'scsh': { 'left': ';' },
     \ 'scss': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/'},
     \ 'sed': { 'left': '#' },
@@ -398,14 +400,15 @@ let s:delimiterMap = {
     \ 'st': { 'left': '"' },
     \ 'stan': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'stp': { 'left': '/*','right': '*/', 'leftAlt': '//' },
-    \ 'swift': { 'left': '/*','right': '*/', 'leftAlt': '//' },
     \ 'supercollider': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
+    \ 'swift': { 'left': '/*','right': '*/', 'leftAlt': '//' },
     \ 'systemverilog': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'tads': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'tags': { 'left': ';' },
     \ 'tak': { 'left': '$' },
     \ 'tasm': { 'left': ';' },
     \ 'tcl': { 'left': '#' },
+    \ 'teak': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'terraform': { 'left': '#', 'leftAlt': '/*', 'rightAlt': '*/'  },
     \ 'tex': { 'left': '%' },
     \ 'texinfo': { 'left': "@c " },
@@ -420,9 +423,9 @@ let s:delimiterMap = {
     \ 'tsscl': { 'left': '#' },
     \ 'tssgm': { 'left': "comment = '", 'right': "'" },
     \ 'tup': { 'left': '#' },
+    \ 'twig': { 'left': '{#', 'right': '#}' },
     \ 'txt2tags': { 'left': '%' },
     \ 'typescript': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
-    \ 'twig': { 'left': '{#', 'right': '#}' },
     \ 'uc': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'uil': { 'left': '!' },
     \ 'upstart': { 'left': '#' },
@@ -440,7 +443,7 @@ let s:delimiterMap = {
     \ 'vsejcl': { 'left': '/*' },
     \ 'webmacro': { 'left': '##' },
     \ 'wget': { 'left': '#' },
-    \ 'Wikipedia': { 'left': '<!--', 'right': '-->' },
+    \ 'wikipedia': { 'left': '<!--', 'right': '-->' },
     \ 'winbatch': { 'left': ';' },
     \ 'wml': { 'left': '#' },
     \ 'wvdial': { 'left': ';' },
@@ -515,7 +518,7 @@ function s:SetUpForNewFiletype(filetype, forceReset)
             endif
         endfor
         " if g:NERD_<filetype>_alt_style is defined, use the alternate style
-        let b:NERDCommenterFirstInit = getbufvar(1,"NERDCommenterFirstInit",0)
+        let b:NERDCommenterFirstInit = getbufvar(1,"NERDCommenterFirstInit")
         if exists('g:NERDAltDelims_'.ft) && eval('g:NERDAltDelims_'.ft) && !b:NERDCommenterFirstInit
             call s:SwitchToAlternativeDelimiters(0)
             let b:NERDCommenterFirstInit = 1
@@ -555,6 +558,9 @@ endfunction
 "   -printMsgs: if this is 1 then a message is echoed to the user telling them
 "    if this function changed the delimiters or not
 function s:SwitchToAlternativeDelimiters(printMsgs)
+    if exists('*NERDCommenter_before')
+        exe "call NERDCommenter_before()"
+    endif
     "if both of the alternative delimiters are empty then there is no
     "alternative comment style so bail out
     if b:NERDCommenterDelims['leftAlt'] == '' && b:NERDCommenterDelims['rightAlt'] == ''
@@ -585,6 +591,10 @@ function s:SwitchToAlternativeDelimiters(printMsgs)
         call s:NerdEcho("Now using " . s:Left() . " " . s:Right() . " to delimit comments", 1)
     endif
 
+    if exists('*NERDCommenter_after')
+        exe "call NERDCommenter_after()"
+    endif
+
     return 1
 endfunction
 
@@ -612,8 +622,10 @@ function s:AppendCommentToLine()
     if lenRight > 0
         let leftMoveAmount = lenRight - 1
         execute ":normal! " . leftMoveAmount . "h"
+        startinsert
+    else
+        startinsert!
     endif
-    startinsert
 endfunction
 
 " Function: s:CommentBlock(top, bottom, lSide, rSide, forceNested ) {{{2
@@ -1149,6 +1161,10 @@ endfunction
 "    'Minimal', 'Toggle', 'AlignLeft', 'AlignBoth', 'Comment',
 "    'Nested', 'ToEOL', 'Append', 'Insert', 'Uncomment', 'Yank'
 function! NERDComment(mode, type) range
+    if exists('*NERDCommenter_before')
+        exe "call NERDCommenter_before()"
+    endif
+
     let isVisual = a:mode =~ '[vsx]'
 
     if !exists("g:did_load_ftplugin") || g:did_load_ftplugin != 1
@@ -1253,6 +1269,11 @@ function! NERDComment(mode, type) range
     else
         silent! call repeat#set("\<Plug>NERDCommenter". a:type)
     endif
+
+    if exists('*NERDCommenter_after')
+        exe "call NERDCommenter_after()"
+    endif
+
 endfunction
 
 " Function: s:PlaceDelimitersAndInsBetween() function {{{2
@@ -1400,6 +1421,15 @@ function s:RecoverStateAfterLineComment(state)
     endif
 endfunction
 
+" Function: s:TrimTrailingWhitespace(line) {{{2
+" This function removes all the trailing whitespace
+" Args:
+"   -line: the target line
+function s:TrimTrailingWhitespace(line)
+    let toReturn = substitute(a:line, '\s\+$', '', 'g')
+    return toReturn
+endfunction
+
 " Function: s:UncommentLines(topLine, bottomLine) {{{2
 " This function uncomments the given lines
 "
@@ -1491,6 +1521,10 @@ function s:UncommentLinesSexy(topline, bottomline)
         let theLine = s:SwapOuterPlaceHoldersForMultiPartDelims(theLine)
 
         let theLine = s:ConvertLeadingWhiteSpace(theLine)
+
+        if g:NERDTrimTrailingWhitespace == 1
+            let theLine = s:TrimTrailingWhitespace(theLine)
+        endif
 
         " move onto the next line
         call setline(currentLine, theLine)
@@ -1632,6 +1666,10 @@ function s:UncommentLineNormal(line)
     endif
 
     let line = s:ConvertLeadingWhiteSpace(line)
+
+    if g:NERDTrimTrailingWhitespace == 1
+        let line = s:TrimTrailingWhitespace(line)
+    endif
 
     return line
 endfunction
@@ -1791,8 +1829,9 @@ function s:CanToggleCommentLine(forceNested, lineNum)
         return 0
     endif
 
-    " make sure we don't comment lines that are just spaces or tabs or empty.
-    if theLine =~ "^[ \t]*$"
+    " make sure we don't comment lines that are just spaces or tabs or empty,
+    " unless configured otherwise
+    if g:NERDCommentEmptyLines == 0 && theLine =~ "^[ \t]*$"
         return 0
     endif
 
