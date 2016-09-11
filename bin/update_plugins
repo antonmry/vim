@@ -23,8 +23,8 @@ syntastic https://github.com/scrooloose/syntastic
 neocomplete.vim https://github.com/Shougo/neocomplete.vim
 neosnippet.vim https://github.com/Shougo/neosnippet.vim
 neosnippet-snippets https://github.com/Shougo/neosnippet-snippets
-auto-pairs https://github.com/jiangmiao/auto-pairs
 tagbar https://github.com/majutsushi/tagbar
+vim-airline https://github.com/vim-airline/vim-airline
 """.strip()
 
 GITHUB_ZIP = '%s/archive/master.zip'

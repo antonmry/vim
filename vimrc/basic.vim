@@ -37,9 +37,6 @@ nnoremap JJJJ <nop>
 " Make sure that coursor is always vertically centered on j/k moves
 set so=999
 
-" add vertical lines on columns
-set colorcolumn=80,120
-
 " Avoid garbled characters in Chinese language windows OS
 let $LANG='en'
 set langmenu=en
@@ -69,8 +66,9 @@ endif
 " Show line, column number, and relative position within a file in the status line
 set ruler
 
-" Show line numbers - could be toggled on/off on-fly by pressing F6
+" Show line numbers 
 set number
+set relativenumber
 
 " Show (partial) commands (or size of selection in Visual mode) in the status line
 set showcmd
@@ -133,13 +131,16 @@ set nrformats=octal,hex,alpha
 
 " Enable syntax highlighting
 syntax enable
-
-try
-    colorscheme desert
-catch
-endtry
-
+set term=screen-256color
+"set colorcolumn=80,120
 set background=dark
+"set background=light
+"set t_Co=256
+
+let g:solarized_termcolors=256
+colorscheme solarized
+"colorscheme desert
+"colorscheme foursee
 
 " Set extra options when running in GUI mode
 if has("gui_running")
