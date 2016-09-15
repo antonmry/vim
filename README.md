@@ -25,9 +25,7 @@ And btw, nothing prevents you from creation of a handy alias in your `.bash_alia
 
     alias vim='vimx -u ~/.vimrc.antonmry'
 
-### 3. Thanks
 
-- This envirnoment is fully based in the Go IDE created by farazdagi, more info at [blog post](http://farazdagi.com/blog/2015/vim-as-golang-ide/).
-- You can also define your custom settings in `~/.vim_antonmry_runtime/custom_config.vim` the runtime will try to load this file - so feel free to remap keys as you see necessary!
+You can also define your custom settings in `~/.vim_antonmry_runtime/custom_config.vim` the runtime will try to load this file - so feel free to remap keys as you see necessary!
 
 **If you know some plugin that will enhance this setup and thus should be included - submit a PR**
