@@ -1,3 +1,7 @@
+Discontinued in favor of https://github.com/antonmry/dotfiles/blob/master/dot_vimrc
+
+-----------------------------------
+
 # vim
 
 The Vim configuration I'm using in my laptop.
